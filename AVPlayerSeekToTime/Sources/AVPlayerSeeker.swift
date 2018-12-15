@@ -11,7 +11,7 @@ public typealias SeekerCompletion = ()->Void
 public extension AVPlayer {
     
     public func fl_seekSmoothly(to newChaseTime: CMTime, completion: (SeekerCompletion)? = nil) {
-        guard newChaseTime.isValid, newChaseTime >= kCMTimeZero else { return }
+        guard newChaseTime.isValid, newChaseTime >= CMTime.zero else { return }
         var seeker = objc_getAssociatedObject(self, &seekerKey) as? AVPlayerSeeker
         if seeker == nil {
             seeker = AVPlayerSeeker(player: self)
@@ -35,7 +35,7 @@ open class AVPlayerSeeker {
     
     open weak var player: AVPlayer?
     fileprivate var isSeekInProgress = false
-    fileprivate var chaseTime = kCMTimeZero
+    fileprivate var chaseTime = CMTime.zero
     fileprivate var completions: [SeekerCompletion] = []
     
     public init(player: AVPlayer) {
@@ -88,7 +88,7 @@ open class AVPlayerSeeker {
         }
         isSeekInProgress = true
 //        print("actuallySeekToTime: \(chaseTime)")
-        player.seek(to: chaseTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero, completionHandler: { [weak self] isFinished in
+        player.seek(to: chaseTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero, completionHandler: { [weak self] isFinished in
             guard let s = self, let player = s.player else { return }
 //            print("seek done: \(player.currentTime()), chaseTime: \(s.chaseTime)")
             DispatchQueue.main.async {
